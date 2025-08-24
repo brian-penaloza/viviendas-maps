@@ -7,6 +7,7 @@ import "./../app/app.css";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
 import "@aws-amplify/ui-react/styles.css";
+import GoogleMaps from "@/app/components/google-maps";
 
 Amplify.configure(outputs);
 
@@ -31,6 +32,29 @@ export default function App() {
     });
   }
 
+  const markers = [
+    {
+      lat: 51.5074,
+      lng: 0.1278,
+      title: "London",
+    },
+    {
+      lat: 40.7128,
+      lng: -74.006,
+      title: "New York",
+    },
+    {
+      lat: 34.0522,
+      lng: -118.2437,
+      title: "Los Angeles",
+    },
+    {
+      lat: 41.8781,
+      lng: -87.6298,
+      title: "Chicago",
+    },
+  ];
+
   return (
     <main>
       <h1>My todos</h1>
@@ -47,6 +71,7 @@ export default function App() {
           Review next steps of this tutorial.
         </a>
       </div>
+      <GoogleMaps markers={markers} />
     </main>
   );
 }
