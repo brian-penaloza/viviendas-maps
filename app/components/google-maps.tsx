@@ -15,6 +15,11 @@ interface GoogleMapsProps {
 function GoogleMaps({ markers }: GoogleMapsProps) {
   const mapRef = useRef<HTMLDivElement>(null);
 
+  console.log(
+    "process.env.NEXT_PUBLIC_JUST_2_TEST",
+    process.env.NEXT_PUBLIC_JUST_2_TEST
+  );
+
   useEffect(() => {
     const initMap = async () => {
       const loader = new Loader({
