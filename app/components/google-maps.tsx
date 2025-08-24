@@ -61,6 +61,6 @@ function GoogleMaps({ markers }: GoogleMapsProps) {
     initMap();
   }, []);
 
-  return <div ref={mapRef} className="w-full h-screen" />;
+  return <div ref={mapRef} style={{ minHeight: "400px" }} />;
 }
 export default GoogleMaps;
