@@ -1,10 +1,9 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 /*== STEP 1 ===============================================================
-The section below creates a Todo database table with a "content" field. Try
-adding a new "isDone" field as a boolean. The authorization rule below
-specifies that any user authenticated via an API key can "create", "read",
-"update", and "delete" any "Todo" records.
+The section below creates a Property database table with a "content" field and
+an Area database table with hierarchical relationships. Properties are linked
+to areas, and areas can have parent areas creating a nested structure.
 =========================================================================*/
 const schema = a.schema({
   Todo: a
@@ -12,6 +11,34 @@ const schema = a.schema({
       content: a.string(),
       lat: a.float(),
       lng: a.float(),
+    })
+    .authorization((allow) => [allow.publicApiKey()]),
+
+  Property: a
+    .model({
+      content: a.string(),
+      lat: a.float(),
+      lng: a.float(),
+      idArea: a.string(), // Referencia al área donde está ubicada la propiedad
+    })
+    .authorization((allow) => [allow.publicApiKey()]),
+
+  Area: a
+    .model({
+      name: a.string(), // Nombre del área (ej: "Colonia Centro", "Barrio La Vega")
+      description: a.string(), // Descripción opcional del área
+      idSubArea: a.string(), // Referencia al área padre (null si es área raíz)
+      level: a.integer(), // Nivel en la jerarquía (0 = raíz, 1 = subárea, 2 = sub-subárea, etc.)
+      isActive: a.boolean().default(true), // Indica si el área está activa
+    })
+    .authorization((allow) => [allow.publicApiKey()]),
+
+  AreaPoint: a
+    .model({
+      lat: a.float(), // Latitud del punto
+      lng: a.float(), // Longitud del punto
+      order: a.integer(), // Orden del punto en la secuencia del polígono
+      areaId: a.string(), // Referencia al área a la que pertenece este punto
     })
     .authorization((allow) => [allow.publicApiKey()]),
 });
@@ -53,6 +80,7 @@ Fetch records from the database and use them in your frontend component.
 
 /* For example, in a React component, you can use this snippet in your
   function's RETURN statement */
-// const { data: todos } = await client.models.Todo.list()
+// const { data: properties } = await client.models.Property.list()
+// const { data: areas } = await client.models.Area.list()
 
-// return <ul>{todos.map(todo => <li key={todo.id}>{todo.content}</li>)}</ul>
+// return <ul>{properties.map(property => <li key={property.id}>{property.content}</li>)}</ul>
